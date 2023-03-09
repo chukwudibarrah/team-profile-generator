@@ -165,6 +165,10 @@ const internPrompts = () => {
         internPrompts();
       } else {
         let html = render(teamG);
+        if (!fs.existsSync(OUTPUT_DIR)) {
+          fs.mkdirSync(OUTPUT_DIR);
+        }
+        fs.writeFileSync(outputPath, html, "utf-8");
         console.log('html = ', html);
       }
     });
