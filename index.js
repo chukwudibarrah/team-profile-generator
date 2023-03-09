@@ -63,8 +63,12 @@ const promptUser = (team) =>
         internPrompts();
       } else {
         // render(Object.values(team));
+        console.log('teamG = ', teamG);
         let html = render(teamG);
-        console.log('html = ', html);
+        if (!fs.existsSync(OUTPUT_DIR)) {
+          fs.mkdirSync(OUTPUT_DIR);
+        }
+        fs.writeFileSync(outputPath, html, "utf-8");
       }
     });
 
@@ -104,17 +108,22 @@ const engineerPrompts = () => {
     ])
     .then((response) => {
       console.log(response);
-      if (`${response.selectNext}` === "Add an engineer") {
-        let engr = new Engineer (response.engineerName, response.engineerID, response.engineerEmail, response.github);
+      let engr = new Engineer (response.engineerName, response.engineerID, response.engineerEmail, response.github);
       teamG.push(engr);
+      if (`${response.selectNext}` === "Add an engineer") {
+        
         engineerPrompts();
       } else if (`${response.selectNext}` === "Add an intern") {
-        let intern = new Intern (response.internNname, response.internID, response.internEmail, response.school);
-      teamG.push(intern);
+      //   let intern = new Intern (response.internNname, response.internID, response.internEmail, response.school);
+      // teamG.push(intern);
         internPrompts();
       } else {
+        console.log('teamG = ', teamG);
         let html = render(teamG);
-        console.log('html = ', html);
+        if (!fs.existsSync(OUTPUT_DIR)) {
+          fs.mkdirSync(OUTPUT_DIR);
+        }
+        fs.writeFileSync(outputPath, html, "utf-8");
       }
     });
 };
@@ -155,21 +164,21 @@ const internPrompts = () => {
     ])
     .then((response) => {
       console.log(response);
+      let intern = new Intern (response.internName, response.internID, response.internEmail, response.school);
+      teamG.push(intern);
       if (`${response.selectNext}` === "Add an engineer") {
-        let engr = new Engineer (response.engineerName, response.engineerID, response.engineerEmail, response.github);
-      teamG.push(engr);
+        
         engineerPrompts();
       } else if (`${response.selectNext}` === "Add an intern") {
-        let intern = new Intern (response.internNname, response.internID, response.internEmail, response.school);
-      teamG.push(intern);
+        
         internPrompts();
       } else {
+        console.log('teamG = ', teamG);
         let html = render(teamG);
         if (!fs.existsSync(OUTPUT_DIR)) {
           fs.mkdirSync(OUTPUT_DIR);
         }
         fs.writeFileSync(outputPath, html, "utf-8");
-        console.log('html = ', html);
       }
     });
 };
