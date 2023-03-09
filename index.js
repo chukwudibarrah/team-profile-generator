@@ -11,9 +11,7 @@ const OUTPUT_DIR = path.resolve("./OUTPUT_DIR/", "output");
 const outputPath = path.join("OUTPUT_DIR", "team.html");
 
 const render = require("./src/page-template");
-
-const team = [];
-// const manager = [];
+let teamG = [];
 
 // Write Code to gather information about the development team members
 const promptUser = (team) =>
@@ -57,12 +55,16 @@ const promptUser = (team) =>
     ])
     .then((team) => {
       console.log(Object.values(team));
+      let mgr = new Manager (team.name, team.id, team.email, team.officeNumber);
+      teamG.push(mgr);
       if (`${team.selectNext}` === "Add an engineer") {
         engineerPrompts();
       } else if (`${team.selectNext}` === "Add an intern") {
         internPrompts();
       } else {
-        render(Object.values(team));
+        // render(Object.values(team));
+        let html = render(teamG);
+        console.log('html = ', html);
       }
     });
 
@@ -103,11 +105,16 @@ const engineerPrompts = () => {
     .then((response) => {
       console.log(response);
       if (`${response.selectNext}` === "Add an engineer") {
+        let engr = new Engineer (response.engineerName, response.engineerID, response.engineerEmail, response.github);
+      teamG.push(engr);
         engineerPrompts();
       } else if (`${response.selectNext}` === "Add an intern") {
+        let intern = new Intern (response.internNname, response.internID, response.internEmail, response.school);
+      teamG.push(intern);
         internPrompts();
       } else {
-        console.log("Proceed to HTML build");
+        let html = render(teamG);
+        console.log('html = ', html);
       }
     });
 };
@@ -149,11 +156,16 @@ const internPrompts = () => {
     .then((response) => {
       console.log(response);
       if (`${response.selectNext}` === "Add an engineer") {
+        let engr = new Engineer (response.engineerName, response.engineerID, response.engineerEmail, response.github);
+      teamG.push(engr);
         engineerPrompts();
       } else if (`${response.selectNext}` === "Add an intern") {
+        let intern = new Intern (response.internNname, response.internID, response.internEmail, response.school);
+      teamG.push(intern);
         internPrompts();
       } else {
-        console.log("Proceed to HTML build");
+        let html = render(teamG);
+        console.log('html = ', html);
       }
     });
 };
@@ -231,4 +243,4 @@ const internPrompts = () => {
 // </body>
 
 // </html>`
-module.exports = promptUser(team);
+module.exports = promptUser();
